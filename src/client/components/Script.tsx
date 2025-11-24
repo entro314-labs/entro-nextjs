@@ -3,7 +3,8 @@
 import NextScript from 'next/script';
 import type { EntrolyticsConfig } from '../../types';
 
-interface ScriptProps extends Pick<EntrolyticsConfig, 'websiteId' | 'host' | 'proxy' | 'scriptName'> {
+interface ScriptProps
+  extends Pick<EntrolyticsConfig, 'websiteId' | 'linkId' | 'pixelId' | 'host' | 'proxy' | 'scriptName'> {
   /** Additional data attributes */
   autoTrack?: boolean;
   domains?: string[];
@@ -41,6 +42,8 @@ interface ScriptProps extends Pick<EntrolyticsConfig, 'websiteId' | 'host' | 'pr
  */
 export function Script({
   websiteId,
+  linkId,
+  pixelId,
   host,
   proxy,
   scriptName = 'script.js',
@@ -67,6 +70,8 @@ export function Script({
     <NextScript
       src={src}
       data-website-id={websiteId}
+      data-link-id={linkId}
+      data-pixel-id={pixelId}
       data-host-url={host}
       data-auto-track={autoTrack ? undefined : 'false'}
       data-domains={domains?.join(',')}

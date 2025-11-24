@@ -28,6 +28,7 @@ export function usePageView(options: UsePageViewOptions = {}): void {
   const hasTrackedRef = useRef(false);
   const prevDepsRef = useRef<unknown[]>(deps);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: deps is intentionally spread and compared manually
   useEffect(() => {
     if (!isReady || !isEnabled || !enabled) return;
 

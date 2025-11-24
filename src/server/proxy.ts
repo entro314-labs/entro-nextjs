@@ -50,10 +50,7 @@ export function createProxyHandler(config: ProxyHandlerConfig): ProxyHandlers {
       // In cloak mode, inject websiteId into the script
       if (mode === 'cloak' && websiteId && path.endsWith('.js')) {
         // Replace placeholder or inject websiteId
-        content = content.replace(
-          /data-website-id="[^"]*"/g,
-          `data-website-id="${websiteId}"`
-        );
+        content = content.replace(/data-website-id="[^"]*"/g, `data-website-id="${websiteId}"`);
       }
 
       return new Response(content, {
@@ -78,9 +75,10 @@ export function createProxyHandler(config: ProxyHandlerConfig): ProxyHandlers {
         body.payload.website = websiteId;
       }
 
-      const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0].trim()
-        || request.headers.get('x-real-ip')
-        || '';
+      const clientIp =
+        request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+        request.headers.get('x-real-ip') ||
+        '';
 
       const response = await fetch(`${baseUrl}/api/send`, {
         method: 'POST',

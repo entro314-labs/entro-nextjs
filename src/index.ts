@@ -1,29 +1,29 @@
 // Client-side exports (default)
 export {
-  EntrolyticsProvider,
   EntrolyticsContext,
-  useEntrolytics,
-  usePageView,
-  useEventTracker,
-  TrackEvent,
+  EntrolyticsProvider,
   OutboundLink,
   Script,
+  TrackEvent,
+  useEntrolytics,
+  useEventTracker,
+  usePageView,
 } from './client';
 
 // Type exports
 export type {
+  BeforeSendCallback,
+  EnhancedIdentityData,
   EntrolyticsConfig,
   EntrolyticsContextValue,
   EventData,
   EventPayload,
   IdentifyPayload,
-  TrackedProperties,
-  EnhancedIdentityData,
-  TrackEventProps,
   OutboundLinkProps,
-  UsePageViewOptions,
-  ProxyConfig,
-  TrackOptions,
-  BeforeSendCallback,
   PayloadType,
+  ProxyConfig,
+  TrackEventProps,
+  TrackedProperties,
+  TrackOptions,
+  UsePageViewOptions,
 } from './types';

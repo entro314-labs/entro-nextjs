@@ -3,10 +3,10 @@
 import {
   cloneElement,
   isValidElement,
+  type ReactElement,
   useCallback,
   useEffect,
   useRef,
-  type ReactElement,
 } from 'react';
 import type { TrackEventProps } from '../../types';
 import { useEntrolytics } from '../hooks/useEntrolytics';
@@ -56,28 +56,13 @@ export function TrackEvent({
     hasTrackedRef.current = true;
   }, [isReady, once, track, name, data]);
 
-  // Handle click trigger
-  const handleClick = useCallback(
-    async (originalOnClick?: (e: React.MouseEvent) => void) => {
-      return async (e: React.MouseEvent) => {
-        if (trigger === 'click') {
-          await handleTrack();
-        }
-        originalOnClick?.(e);
-      };
-    },
-    [trigger, handleTrack]
-  );
-
-  // Handle submit trigger
-  const handleSubmit = useCallback(
-    async (originalOnSubmit?: (e: React.FormEvent) => void) => {
-      return async (e: React.FormEvent) => {
-        if (trigger === 'submit') {
-          await handleTrack();
-        }
-        originalOnSubmit?.(e);
-      };
+  // Keyboard handler for accessible span wrapper
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (trigger === 'click' && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        handleTrack();
+      }
     },
     [trigger, handleTrack]
   );
@@ -122,9 +107,7 @@ export function TrackEvent({
     };
 
     if (className) {
-      props.className = child.props.className
-        ? `${child.props.className} ${className}`
-        : className;
+      props.className = child.props.className ? `${child.props.className} ${className}` : className;
     }
 
     if (trigger === 'click') {
@@ -144,12 +127,16 @@ export function TrackEvent({
     return cloneElement(child, props);
   }
 
-  // Wrap non-element children in a span
+  // Wrap non-element children in an accessible span
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: role is set conditionally based on trigger
     <span
       ref={elementRef as React.RefObject<HTMLSpanElement>}
       className={className}
+      role={trigger === 'click' ? 'button' : undefined}
+      tabIndex={trigger === 'click' ? 0 : undefined}
       onClick={trigger === 'click' ? handleTrack : undefined}
+      onKeyDown={trigger === 'click' ? handleKeyDown : undefined}
     >
       {children}
     </span>

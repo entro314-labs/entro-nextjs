@@ -1,8 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type {
-  BeforeSendCallback,
   EnhancedIdentityData,
   EntrolyticsConfig,
   EntrolyticsContextValue,
@@ -30,6 +29,8 @@ interface EntrolyticsProviderProps extends EntrolyticsConfig {
 export function EntrolyticsProvider({
   children,
   websiteId,
+  linkId,
+  pixelId,
   host,
   autoTrack = true,
   tag: initialTag,
@@ -67,7 +68,7 @@ export function EntrolyticsProvider({
   // Check if tracking should be disabled
   const checkTrackingDisabled = useCallback((): boolean => {
     if (typeof window === 'undefined') return true;
-    if (!websiteId) return true;
+    if (!websiteId && !linkId && !pixelId) return true;
     if (!isEnabled) return true;
 
     // Check localStorage disable flag
@@ -102,8 +103,7 @@ export function EntrolyticsProvider({
   const getPayload = useCallback((): TrackedProperties => {
     const { screen, navigator, location, document } = window;
 
-    return {
-      website: websiteId,
+    const payload: TrackedProperties = {
       hostname: location.hostname,
       screen: `${screen.width}x${screen.height}`,
       language: navigator.language,
@@ -113,7 +113,14 @@ export function EntrolyticsProvider({
       tag: currentTag,
       id: identity,
     };
-  }, [websiteId, currentTag, identity]);
+
+    // Add the appropriate ID type
+    if (websiteId) payload.website = websiteId;
+    else if (linkId) payload.link = linkId;
+    else if (pixelId) payload.pixel = pixelId;
+
+    return payload;
+  }, [websiteId, linkId, pixelId, currentTag, identity]);
 
   // Debug logger
   const log = useCallback(
@@ -127,10 +134,7 @@ export function EntrolyticsProvider({
 
   // Send data to endpoint
   const send = useCallback(
-    async (
-      payload: EventPayload | IdentifyPayload,
-      type: PayloadType = 'event'
-    ): Promise<void> => {
+    async (payload: EventPayload | IdentifyPayload, type: PayloadType = 'event'): Promise<void> => {
       if (checkTrackingDisabled()) {
         log('Tracking disabled, skipping', type);
         return;
@@ -177,7 +181,10 @@ export function EntrolyticsProvider({
   // Track function with multiple overloads
   const track = useCallback(
     async (
-      nameOrPayloadOrFn?: string | Partial<EventPayload> | ((props: TrackedProperties) => EventPayload),
+      nameOrPayloadOrFn?:
+        | string
+        | Partial<EventPayload>
+        | ((props: TrackedProperties) => EventPayload),
       data?: EventData
     ): Promise<void> => {
       const basePayload = getPayload();

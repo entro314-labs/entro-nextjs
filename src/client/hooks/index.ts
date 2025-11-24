@@ -1,3 +1,3 @@
 export { useEntrolytics } from './useEntrolytics';
-export { usePageView } from './usePageView';
 export { useEventTracker } from './useEventTracker';
+export { usePageView } from './usePageView';

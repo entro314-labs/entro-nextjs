@@ -1,4 +1,4 @@
-export { EntrolyticsProvider } from './provider';
+export { OutboundLink, Script, TrackEvent } from './components';
 export { EntrolyticsContext } from './context';
-export { useEntrolytics, usePageView, useEventTracker } from './hooks';
-export { TrackEvent, OutboundLink, Script } from './components';
+export { useEntrolytics, useEventTracker, usePageView } from './hooks';
+export { EntrolyticsProvider } from './provider';

@@ -4,8 +4,12 @@ import type { EventData } from '../types';
 interface ServerTrackConfig {
   /** Entrolytics host URL */
   host: string;
-  /** Website ID */
-  websiteId: string;
+  /** Website ID (use one of: websiteId, linkId, or pixelId) */
+  websiteId?: string;
+  /** Link ID for link tracking */
+  linkId?: string;
+  /** Pixel ID for conversion tracking */
+  pixelId?: string;
 }
 
 interface ServerTrackOptions {
@@ -56,7 +60,7 @@ export async function trackServerEvent(
   config: ServerTrackConfig,
   options: ServerTrackOptions = {}
 ): Promise<{ ok: boolean; error?: string }> {
-  const { host, websiteId } = config;
+  const { host, websiteId, linkId, pixelId } = config;
   const { event, data, url, title, referrer, id, tag, request } = options;
 
   const baseUrl = host.replace(/\/$/, '');
@@ -90,8 +94,7 @@ export async function trackServerEvent(
     }
   }
 
-  const payload = {
-    website: websiteId,
+  const payload: Record<string, unknown> = {
     hostname,
     language,
     screen: '0x0',
@@ -103,6 +106,11 @@ export async function trackServerEvent(
     ...(id && { id }),
     ...(tag && { tag }),
   };
+
+  // Add the appropriate ID type
+  if (websiteId) payload.website = websiteId;
+  else if (linkId) payload.link = linkId;
+  else if (pixelId) payload.pixel = pixelId;
 
   try {
     const response = await fetch(`${baseUrl}/api/send`, {

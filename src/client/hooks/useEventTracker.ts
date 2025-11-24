@@ -15,10 +15,7 @@ interface EventTrackerReturn {
   /** Track an event with optional name and data overrides */
   trackEvent: (name?: string, data?: EventData) => Promise<void>;
   /** Create a click handler that tracks an event */
-  createClickHandler: (
-    name?: string,
-    data?: EventData
-  ) => (e?: React.MouseEvent) => Promise<void>;
+  createClickHandler: (name?: string, data?: EventData) => (e?: React.MouseEvent) => Promise<void>;
   /** Whether tracking is ready */
   isReady: boolean;
 }

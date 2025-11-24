@@ -22,8 +22,12 @@ export interface TrackedProperties {
   title: string;
   /** Page URL */
   url: string;
-  /** Website ID */
-  website: string;
+  /** Website ID (or use link/pixel) */
+  website?: string;
+  /** Link ID (alternative to website) */
+  link?: string;
+  /** Pixel ID (alternative to website) */
+  pixel?: string;
   /** Optional tag for A/B testing */
   tag?: string;
   /** Optional distinct ID for user tracking */
@@ -57,8 +61,12 @@ export type BeforeSendCallback = (
 ) => EventPayload | IdentifyPayload | null | undefined;
 
 export interface EntrolyticsConfig {
-  /** Your Entrolytics website ID (required) */
-  websiteId: string;
+  /** Your Entrolytics website ID (required - use one of: websiteId, linkId, or pixelId) */
+  websiteId?: string;
+  /** Your Entrolytics link ID for link tracking */
+  linkId?: string;
+  /** Your Entrolytics pixel ID for conversion tracking */
+  pixelId?: string;
   /** Custom analytics host URL */
   host?: string;
   /** Automatically track page views (default: true) */
@@ -188,7 +196,9 @@ export interface EntrolyticsContextValue {
   /** Set the current tag */
   setTag: (tag: string) => void;
   /** Generate enhanced identity data with browser metadata */
-  generateEnhancedIdentity: (data?: Record<string, string | number | boolean | undefined>) => EnhancedIdentityData;
+  generateEnhancedIdentity: (
+    data?: Record<string, string | number | boolean | undefined>
+  ) => EnhancedIdentityData;
   /** Whether the tracker is ready */
   isReady: boolean;
   /** Whether tracking is enabled */

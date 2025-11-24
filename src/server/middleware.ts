@@ -60,9 +60,7 @@ export function withEntrolyticsMiddleware(config: MiddlewareConfig): MiddlewareH
 
   // Convert glob patterns to regex
   const routeToRegex = (pattern: string): RegExp => {
-    const escaped = pattern
-      .replace(/[.+?^${}()|[\]\\]/g, '\\$&')
-      .replace(/\*/g, '.*');
+    const escaped = pattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
     return new RegExp(`^${escaped}$`);
   };
 
@@ -144,9 +142,7 @@ export function withEntrolyticsMiddleware(config: MiddlewareConfig): MiddlewareH
  * export const middleware = composeMiddleware(entrolytics, auth);
  * ```
  */
-export function composeMiddleware(
-  ...middlewares: MiddlewareHandler[]
-): MiddlewareHandler {
+export function composeMiddleware(...middlewares: MiddlewareHandler[]): MiddlewareHandler {
   return async (request: NextRequest, initialResponse?: NextResponse) => {
     let response = initialResponse;
 
