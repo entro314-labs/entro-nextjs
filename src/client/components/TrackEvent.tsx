@@ -64,7 +64,7 @@ export function TrackEvent({
         handleTrack();
       }
     },
-    [trigger, handleTrack]
+    [trigger, handleTrack],
   );
 
   // Handle visibility trigger with Intersection Observer
@@ -75,8 +75,8 @@ export function TrackEvent({
     if (!element) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+      entries => {
+        entries.forEach(entry => {
           if (entry.isIntersecting) {
             handleTrack();
             if (once) {
@@ -85,7 +85,7 @@ export function TrackEvent({
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
 
     observer.observe(element);

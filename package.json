@@ -59,7 +59,7 @@
     "react-dom": ">=18.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.7",
+    "@biomejs/biome": "2.3.7",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.6",
     "@types/react-dom": "^19.2.3",
@@ -70,6 +70,6 @@
     "typescript": "^5.9.3"
   },
   "engines": {
-    "node": ">=20.x"
+    "node": ">=22.x"
   }
 }

@@ -57,7 +57,7 @@ export function OutboundLink({
 
       onClick?.(e);
     },
-    [isReady, trackOutboundLink, href, data, onClick, props.target]
+    [isReady, trackOutboundLink, href, data, onClick, props.target],
   );
 
   return (

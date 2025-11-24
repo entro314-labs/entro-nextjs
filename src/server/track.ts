@@ -58,7 +58,7 @@ interface ServerTrackOptions {
  */
 export async function trackServerEvent(
   config: ServerTrackConfig,
-  options: ServerTrackOptions = {}
+  options: ServerTrackOptions = {},
 ): Promise<{ ok: boolean; error?: string }> {
   const { host, websiteId, linkId, pixelId } = config;
   const { event, data, url, title, referrer, id, tag, request } = options;
@@ -157,7 +157,7 @@ export async function trackServerEvent(
  */
 export async function identifyServerSession(
   config: ServerTrackConfig,
-  options: Pick<ServerTrackOptions, 'id' | 'data' | 'request'>
+  options: Pick<ServerTrackOptions, 'id' | 'data' | 'request'>,
 ): Promise<{ ok: boolean; error?: string }> {
   const { host, websiteId } = config;
   const { id, data, request } = options;

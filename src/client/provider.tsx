@@ -45,6 +45,7 @@ export function EntrolyticsProvider({
   proxy = false,
   scriptName = 'script.js',
   debug = false,
+  useEdgeRuntime = true,
 }: EntrolyticsProviderProps) {
   const [isReady, setIsReady] = useState(false);
   const [isEnabled, setIsEnabled] = useState(true);
@@ -59,11 +60,15 @@ export function EntrolyticsProvider({
     if (proxy && typeof proxy === 'object' && proxy.enabled) {
       return proxy.collectPath || '/api/collect';
     }
+
+    // Choose endpoint based on edge runtime configuration
+    const endpointPath = useEdgeRuntime ? '/api/send-edge' : '/api/send';
+
     if (host) {
-      return `${host.replace(/\/$/, '')}/api/send`;
+      return `${host.replace(/\/$/, '')}${endpointPath}`;
     }
-    return '/api/send';
-  }, [host, proxy]);
+    return endpointPath;
+  }, [host, proxy, useEdgeRuntime]);
 
   // Check if tracking should be disabled
   const checkTrackingDisabled = useCallback((): boolean => {
@@ -129,7 +134,7 @@ export function EntrolyticsProvider({
         console.log('[Entrolytics]', ...args);
       }
     },
-    [debug]
+    [debug],
   );
 
   // Send data to endpoint
@@ -175,7 +180,7 @@ export function EntrolyticsProvider({
         log('Error sending', type, error);
       }
     },
-    [endpoint, checkTrackingDisabled, beforeSend, log]
+    [endpoint, checkTrackingDisabled, beforeSend, log],
   );
 
   // Track function with multiple overloads
@@ -185,7 +190,7 @@ export function EntrolyticsProvider({
         | string
         | Partial<EventPayload>
         | ((props: TrackedProperties) => EventPayload),
-      data?: EventData
+      data?: EventData,
     ): Promise<void> => {
       const basePayload = getPayload();
 
@@ -203,7 +208,7 @@ export function EntrolyticsProvider({
 
       return send(basePayload);
     },
-    [getPayload, send]
+    [getPayload, send],
   ) as EntrolyticsContextValue['track'];
 
   // Track page view
@@ -214,7 +219,7 @@ export function EntrolyticsProvider({
       if (referrer) payload.referrer = referrer;
       return send(payload);
     },
-    [getPayload, send]
+    [getPayload, send],
   );
 
   // Identify function
@@ -235,7 +240,7 @@ export function EntrolyticsProvider({
 
       return send(payload, 'identify');
     },
-    [getPayload, send]
+    [getPayload, send],
   ) as EntrolyticsContextValue['identify'];
 
   // Track revenue
@@ -256,7 +261,7 @@ export function EntrolyticsProvider({
         },
       });
     },
-    [getPayload, send, log]
+    [getPayload, send, log],
   );
 
   // Track outbound link
@@ -272,7 +277,7 @@ export function EntrolyticsProvider({
         },
       });
     },
-    [getPayload, send, outboundLinkEvent]
+    [getPayload, send, outboundLinkEvent],
   );
 
   // Set tag
@@ -299,7 +304,7 @@ export function EntrolyticsProvider({
         platform: navigator.platform,
       };
     },
-    []
+    [],
   );
 
   // Initialize URL tracking
@@ -442,6 +447,7 @@ export function EntrolyticsProvider({
       proxy,
       scriptName,
       debug,
+      useEdgeRuntime,
     }),
     [
       websiteId,
@@ -459,7 +465,8 @@ export function EntrolyticsProvider({
       proxy,
       scriptName,
       debug,
-    ]
+      useEdgeRuntime,
+    ],
   );
 
   const value = useMemo<EntrolyticsContextValue>(
@@ -486,7 +493,7 @@ export function EntrolyticsProvider({
       isReady,
       isEnabled,
       config,
-    ]
+    ],
   );
 
   return <EntrolyticsContext.Provider value={value}>{children}</EntrolyticsContext.Provider>;

@@ -15,7 +15,7 @@ interface MiddlewareConfig {
 
 type MiddlewareHandler = (
   request: NextRequest,
-  response?: NextResponse
+  response?: NextResponse,
 ) => Promise<NextResponse | Response | undefined> | NextResponse | Response | undefined;
 
 /**
@@ -69,7 +69,7 @@ export function withEntrolyticsMiddleware(config: MiddlewareConfig): MiddlewareH
 
   const shouldTrack = (pathname: string): boolean => {
     // Check exclusions first
-    if (excludePatterns.some((pattern) => pattern.test(pathname))) {
+    if (excludePatterns.some(pattern => pattern.test(pathname))) {
       return false;
     }
 
@@ -78,7 +78,7 @@ export function withEntrolyticsMiddleware(config: MiddlewareConfig): MiddlewareH
       return false; // Default to not tracking unless specified
     }
 
-    return trackPatterns.some((pattern) => pattern.test(pathname));
+    return trackPatterns.some(pattern => pattern.test(pathname));
   };
 
   return async (request: NextRequest, response?: NextResponse) => {
@@ -120,7 +120,7 @@ export function withEntrolyticsMiddleware(config: MiddlewareConfig): MiddlewareH
           type: 'event',
           payload,
         }),
-      }).catch((error) => {
+      }).catch(error => {
         console.error('[Entrolytics Middleware] tracking error:', error);
       });
     }

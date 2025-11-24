@@ -57,7 +57,7 @@ export type PayloadType = 'event' | 'identify';
 
 export type BeforeSendCallback = (
   type: PayloadType,
-  payload: EventPayload | IdentifyPayload
+  payload: EventPayload | IdentifyPayload,
 ) => EventPayload | IdentifyPayload | null | undefined;
 
 export interface EntrolyticsConfig {
@@ -95,6 +95,8 @@ export interface EntrolyticsConfig {
   scriptName?: string;
   /** Enable debug mode with console logging */
   debug?: boolean;
+  /** Use edge runtime endpoints for faster response times (default: true) */
+  useEdgeRuntime?: boolean;
 }
 
 export interface ProxyConfig {
@@ -197,7 +199,7 @@ export interface EntrolyticsContextValue {
   setTag: (tag: string) => void;
   /** Generate enhanced identity data with browser metadata */
   generateEnhancedIdentity: (
-    data?: Record<string, string | number | boolean | undefined>
+    data?: Record<string, string | number | boolean | undefined>,
   ) => EnhancedIdentityData;
   /** Whether the tracker is ready */
   isReady: boolean;

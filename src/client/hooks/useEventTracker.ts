@@ -66,7 +66,7 @@ export function useEventTracker(options: UseEventTrackerOptions = {}): EventTrac
         await track();
       }
     },
-    [track, eventName, defaultData]
+    [track, eventName, defaultData],
   );
 
   const createClickHandler = useCallback(
@@ -75,7 +75,7 @@ export function useEventTracker(options: UseEventTrackerOptions = {}): EventTrac
         await trackEvent(name, data);
       };
     },
-    [trackEvent]
+    [trackEvent],
   );
 
   return {
