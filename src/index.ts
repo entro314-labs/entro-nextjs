@@ -1,5 +1,6 @@
 // Client-side exports (default)
 export {
+  Analytics,
   EntrolyticsContext,
   EntrolyticsProvider,
   OutboundLink,
@@ -27,3 +28,6 @@ export type {
   TrackOptions,
   UsePageViewOptions,
 } from './types';
+
+// Re-export Analytics props type
+export type { AnalyticsProps } from './client/components/Analytics';

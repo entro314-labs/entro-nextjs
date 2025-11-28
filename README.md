@@ -23,39 +23,29 @@ pnpm add @entro314labs/entro-nextjs
 
 ## Quick Start
 
-### 1. Setup Provider
-
-```tsx
-// app/providers.tsx
-'use client';
-
-import { EntrolyticsProvider } from '@entro314labs/entro-nextjs';
-
-export function Providers({ children }: { children: React.ReactNode }) {
-  return (
-    <EntrolyticsProvider
-      websiteId={process.env.NEXT_PUBLIC_ENTROLYTICS_WEBSITE_ID!}
-      host={process.env.NEXT_PUBLIC_ENTROLYTICS_HOST}
-    >
-      {children}
-    </EntrolyticsProvider>
-  );
-}
-```
+### 1. Add Analytics Component
 
 ```tsx
 // app/layout.tsx
-import { Providers } from './providers';
+import { Analytics } from '@entro314labs/entro-nextjs';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html>
       <body>
-        <Providers>{children}</Providers>
+        {children}
+        <Analytics />
       </body>
     </html>
   );
 }
+```
+
+That's it! The `<Analytics />` component automatically reads from your `.env.local`:
+
+```bash
+NEXT_PUBLIC_ENTROLYTICS_WEBSITE_ID=your-website-id
+NEXT_PUBLIC_ENTROLYTICS_HOST=https://entrolytics.click
 ```
 
 ### 2. Track Events
@@ -78,7 +68,27 @@ export function SignupButton() {
 
 ## Configuration
 
+### Simple Configuration (Recommended)
+
+Use the `<Analytics />` component with props:
+
 ```tsx
+<Analytics
+  debug={true}
+  autoTrack={true}
+  trackOutboundLinks={true}
+/>
+```
+
+All configuration options are optional - the component reads `websiteId` and `host` from environment variables.
+
+### Advanced Configuration
+
+For more control, use `<EntrolyticsProvider>` directly:
+
+```tsx
+import { EntrolyticsProvider } from '@entro314labs/entro-nextjs';
+
 <EntrolyticsProvider
   websiteId="your-website-id"           // Required
   host="https://analytics.example.com"  // Optional: custom host
@@ -95,7 +105,9 @@ export function SignupButton() {
     if (isAdmin) return null;
     return payload;
   }}
-/>
+>
+  {children}
+</EntrolyticsProvider>
 ```
 
 ## Hooks

@@ -20,7 +20,7 @@
     "directory": "entro-nextjs"
   },
   "bugs": {
-    "url": "https://github.com/entro314labs/entro-nextjs/issues"
+    "url": "https://github.com/entro314-labs/entro-nextjs/issues"
   },
   "type": "module",
   "main": "dist/index.cjs",
