@@ -93,6 +93,7 @@ import { EntrolyticsProvider } from '@entro314labs/entro-nextjs';
   websiteId="your-website-id"           // Required
   host="https://analytics.example.com"  // Optional: custom host
   autoTrack={true}                      // Auto page views (default: true)
+  useEdgeRuntime={true}                 // Use edge endpoints (default: true)
   tag="production"                      // A/B testing tag
   domains={['example.com']}             // Restrict to domains
   excludeSearch={false}                 // Strip query params
@@ -109,6 +110,46 @@ import { EntrolyticsProvider } from '@entro314labs/entro-nextjs';
   {children}
 </EntrolyticsProvider>
 ```
+
+### Runtime Configuration
+
+The `useEdgeRuntime` prop controls which collection endpoint is used:
+
+**Edge Runtime (default)** - Optimized for speed:
+```tsx
+<EntrolyticsProvider
+  websiteId="your-website-id"
+  useEdgeRuntime={true} // or omit (default)
+>
+  {children}
+</EntrolyticsProvider>
+```
+
+- **Latency**: 50-100ms via edge proxy to Node.js backend
+- **Best for**: Most production applications
+- **Endpoint**: Uses `/api/send-edge` (edge proxy with global distribution)
+
+**Node.js Runtime** - Direct backend connection:
+```tsx
+<EntrolyticsProvider
+  websiteId="your-website-id"
+  useEdgeRuntime={false}
+>
+  {children}
+</EntrolyticsProvider>
+```
+
+- **Features**: Direct Node.js connection, ClickHouse export, MaxMind GeoIP
+- **Best for**: Self-hosted deployments, custom backend configurations
+- **Endpoint**: Uses `/api/send` (Node.js runtime)
+- **Latency**: 50-150ms (regional)
+
+**When to use Node.js runtime**:
+- Self-hosted deployments without edge runtime
+- Custom backend configurations
+- Testing/development environments
+
+See the [Intelligent Routing](/docs/concepts/routing) guide for more details on collection endpoints.
 
 ## Hooks
 

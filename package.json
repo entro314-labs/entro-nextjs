@@ -1,6 +1,6 @@
 {
   "name": "@entro314labs/entro-nextjs",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Official Next.js integration for Entrolytics analytics",
   "keywords": [
     "analytics",
@@ -68,7 +68,7 @@
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "next": "^16.0.5",
+    "next": "^16.0.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "tsup": "^8.5.1",
